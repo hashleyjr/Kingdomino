@@ -5,12 +5,20 @@ public class Domino {
 	private Square leftSquare;
 	private Square rightSquare;
 	private int number;
+	private boolean played;
 	
 	public Domino(){
-		
+		this.played = false;
 	}
-	public void printIt(){
-		System.out.print(this.leftSquare.getCrowns() + "" + this.leftSquare.getName() + " " + this.rightSquare.getCrowns() + "" + this.rightSquare.getName() + this.number);
+	
+	public void setPlayed(){
+		this.played = true;
+	}
+	public boolean getPlayed(){
+		return this.played;
+	}
+	public void printADomino(){
+		System.out.print(this.leftSquare.getName() + "" + this.leftSquare.getCrowns() + "  " + this.rightSquare.getName() + "" + this.rightSquare.getCrowns() + " " + this.number);
 	}
 
 	public void setLeft(Square leftSquare){
@@ -37,7 +45,7 @@ public class Domino {
 		return this.rightSquare.getCrowns();
 	}
 	public int getNumber(){
-		return this.getNumber();
+		return this.number;
 	}
 	
 	
