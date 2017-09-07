@@ -1,5 +1,6 @@
 package kd;
-
+//class that represents one domino in a game of KingDomino. One domino is made up of two Squares objects, a left one and a right one, a number 
+//used to order them when setting out a new turn, and a boolean to see if the domino is still in the supply, or if it's been played.
 public class Domino {
 	
 	private Square leftSquare;
