@@ -1,6 +1,9 @@
 package kd;
 
+import java.awt.ComponentOrientation;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.util.Random;
 
@@ -59,33 +62,44 @@ public class GameState extends JPanel {
 
 				currentTurn[i].printADomino();
 				System.out.println("");
+				add(currentTurn[i]);
 
 			}
 		}
+		
 	}
-
-	public static void main(String[] args) {
-		GameState yea = new GameState();
-		JFrame frame = new JFrame("the game");
-		JButton button = new JButton("Draw new turn");
+	JButton b1;
+	public GameState(){
+		/*JButton button = new JButton("Draw new turn");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// display/center the jdialog when the button is pressed
 
-				yea.displayNewTurn();
+				
 				System.out.println("");
 			}
 		});
 		button.setBounds(50, 50, 200, 50);
-		frame.add(button);
+		add(button);
+		
+	*/
+	
+		setLayout(new GridLayout(4,2,0,0));
+		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		displayNewTurn();
+	}
+	
 
-		// Setting Frame size. This is the window size
-		frame.setSize(300, 200);
-
-		frame.setLayout(null);
-		frame.setVisible(true);
-
+	public static void main(String[] args) {
+		GameState yea = new GameState();
+		//yea.setLayout(new GridLayout(4,2,0,0));
+		JFrame frame = new JFrame("the game");
+		frame.setSize(500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   
+		frame.setVisible(true);
+		frame.add(yea);
+	
 
 	}
 
