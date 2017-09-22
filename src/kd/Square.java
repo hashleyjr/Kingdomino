@@ -20,17 +20,8 @@ public class Square extends Rectangle{
 		FARM, MINE, WATER, SWAMP, PLAIN, FOREST;
 	}
 	
-	public Square()
-	{
-		
-	}
-	public Color getColor(){
-		return this.theColor;
-	}
-	
-	
 	public Square(TerrainType terrainType){
-	
+		
 		switch (terrainType) {
 		case FARM:
 			this.name ="Farm";
@@ -59,6 +50,13 @@ public class Square extends Rectangle{
 			
 		}
 	}
+	
+	public Color getColor(){
+		return this.theColor;
+	}
+	
+	
+	
 	public String getName(){
 		return this.name;
 	}

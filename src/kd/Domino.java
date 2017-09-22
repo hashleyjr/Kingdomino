@@ -7,8 +7,10 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-//class that represents one domino in a game of KingDomino. One domino is made up of two Squares objects, a left one and a right one, a number 
-//used to order them when setting out a new turn, and a boolean to see if the domino is still in the supply, or if it's been played.
+/*
+class that represents one domino in a game of KingDomino. One domino is made up of two Square objects, a left one and a right one, a number 
+used to order them when setting out a new turn, and a boolean to see if the domino is still in the supply, or if it's been played.
+*/
 public class Domino extends JPanel {
 
 	private Square leftSquare;
@@ -67,8 +69,9 @@ public class Domino extends JPanel {
 
 	public void paintComponent(Graphics g) {
 
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		
+
 		g2.setFont(new Font("TimesRoman", Font.BOLD, 20));
 		leftSquare.setBounds(0, 0, 100, 100);
 		g2.setColor(leftSquare.getColor());
@@ -77,8 +80,7 @@ public class Domino extends JPanel {
 		g2.drawString(leftSquare.getCrownsString(), 5, 50);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, 100, 100);
-		
-		
+
 		rightSquare.setBounds(100, 0, 100, 100);
 		g2.setColor(rightSquare.getColor());
 		g2.fill(rightSquare);
@@ -86,7 +88,7 @@ public class Domino extends JPanel {
 		g2.drawString(rightSquare.getCrownsString(), 105, 50);
 		g.setColor(Color.black);
 		g.drawRect(100, 0, 100, 100);
-		
+
 	}
 
 	private static Color complementaryColor(Color color) {

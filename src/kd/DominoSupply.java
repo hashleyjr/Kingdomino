@@ -1,13 +1,7 @@
 package kd;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import kd.Square.TerrainType;
+
 //this class represents the supply of dominoes to be drawn from for each turn.
 public class DominoSupply {
 
@@ -15,11 +9,12 @@ public class DominoSupply {
 		setUpSupply();
 	}
 
-	// variable representing the supply of unplayed dominos
+	// variable representing the supply of unplayed dominos. When new dominoes are drawn from this array for a new turn, those dominoes
+	//will no longer be drawable.
 	private Domino[] unplayedDominoes = new Domino[48];
-	
-	// sets up the initial supply of dominos to be chosen and placed
-	public  void setUpSupply() {
+
+	// sets up the initial supply of dominos that will be used to set up each turn
+	public void setUpSupply() {
 
 		for (int i = 0; i < unplayedDominoes.length; i++) {
 
@@ -99,21 +94,22 @@ public class DominoSupply {
 		}
 
 	}
-	
-	//getter method for the unplayedDominoes variable
-	public Domino[] getUnplayed(){
+
+	// getter method for the unplayedDominoes variable
+	public Domino[] getUnplayed() {
 		return unplayedDominoes;
 	}
-	
-	
-	public int length(){
+
+	//this method is used in the TurnCanvas class, simply to make the code a little more tidy.
+	public int length() {
 		return unplayedDominoes.length;
 	}
-	
-	//checks if there are still dominoes left in the supply, i.e. the unplayedDominoes variable
-	public boolean isEmpty(){
-		for (int i = 0; i< unplayedDominoes.length; i++){
-			if (unplayedDominoes[i].getPlayed() == false){
+
+	// checks if there are still dominoes left in the supply, i.e. the
+	// unplayedDominoes variable
+	public boolean isEmpty() {
+		for (int i = 0; i < unplayedDominoes.length; i++) {
+			if (unplayedDominoes[i].getPlayed() == false) {
 				return false;
 			}
 		}
