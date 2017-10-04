@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,26 +17,27 @@ public class TurnCanvas extends JPanel implements ActionListener {
 
 	private DominoSupply theSupply = new DominoSupply();
 	private Domino[] currentTurn;
-	
-	
-	
+	private JButton drawTurnButton = new JButton();
 
 	public TurnCanvas() {
-		JButton button = new JButton("Draw new turn");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				displayNewTurn();
-				System.out.println("");
-			}
-		});
-		button.setBounds(0, 0, 100, 100);
-	
-
-		setLayout(new GridLayout(4, 2, 0, 0));
-		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		displayNewTurn();
 		
+		
+		drawTurnButton.addActionListener(this);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		// setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		displayNewTurn();
+		drawTurnButton.setSize(100, 100);
+		add(drawTurnButton);
+
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		removeAll();
+		revalidate();
+		repaint();
+		displayNewTurn();
+		add(drawTurnButton);
+		System.out.println("");
 	}
 
 	// sets up a new turn of four dominos
@@ -90,12 +92,6 @@ public class TurnCanvas extends JPanel implements ActionListener {
 			}
 		}
 
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

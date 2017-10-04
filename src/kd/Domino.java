@@ -14,7 +14,7 @@ used to order them when setting out a new turn, and a boolean to see if the domi
 public class Domino extends JPanel {
 
 	private Square leftSquare;
-	private Square rightSquare;
+	private Square pivotSquare;
 	private int number;
 	private boolean played;
 
@@ -32,19 +32,26 @@ public class Domino extends JPanel {
 
 	public void printADomino() {
 		System.out.print(this.leftSquare.getName() + "" + this.leftSquare.getCrowns() + "  "
-				+ this.rightSquare.getName() + "" + this.rightSquare.getCrowns() + " " + this.number);
+				+ this.pivotSquare.getName() + "" + this.pivotSquare.getCrowns() + " " + this.number);
 	}
 
 	public void setLeft(Square leftSquare) {
 		this.leftSquare = leftSquare;
 	}
 
-	public void setRight(Square rightSquare) {
-		this.rightSquare = rightSquare;
+	public void setRight(Square pivotSquare) {
+		this.pivotSquare = pivotSquare;
 	}
 
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	public Square getPivot() {
+		return this.pivotSquare;
+	}
+	public Square getLeft(){
+		return this.leftSquare;
 	}
 
 	public void setLeftCrowns(int num) {
@@ -52,7 +59,7 @@ public class Domino extends JPanel {
 	}
 
 	public void setRightCrowns(int num) {
-		this.rightSquare.setCrowns(num);
+		this.pivotSquare.setCrowns(num);
 	}
 
 	public int getLeftCrowns() {
@@ -60,7 +67,7 @@ public class Domino extends JPanel {
 	}
 
 	public int getRightCrowns() {
-		return this.rightSquare.getCrowns();
+		return this.pivotSquare.getCrowns();
 	}
 
 	public int getNumber() {
@@ -73,21 +80,21 @@ public class Domino extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 
 		g2.setFont(new Font("TimesRoman", Font.BOLD, 20));
-		leftSquare.setBounds(0, 0, 100, 100);
+		leftSquare.setBounds(0, 0, 50, 50);
 		g2.setColor(leftSquare.getColor());
 		g2.fill(leftSquare);
 		g2.setColor(complementaryColor(g2.getColor()));
 		g2.drawString(leftSquare.getCrownsString(), 5, 50);
 		g.setColor(Color.black);
-		g.drawRect(0, 0, 100, 100);
+		g.drawRect(0, 0, 50, 50);
 
-		rightSquare.setBounds(100, 0, 100, 100);
-		g2.setColor(rightSquare.getColor());
-		g2.fill(rightSquare);
+		pivotSquare.setBounds(50, 0, 50, 50);
+		g2.setColor(pivotSquare.getColor());
+		g2.fill(pivotSquare);
 		g2.setColor(complementaryColor(g2.getColor()));
-		g2.drawString(rightSquare.getCrownsString(), 105, 50);
+		g2.drawString(pivotSquare.getCrownsString(), 55, 50);
 		g.setColor(Color.black);
-		g.drawRect(100, 0, 100, 100);
+		g.drawRect(50, 0, 50, 50);
 
 	}
 
