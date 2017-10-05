@@ -16,7 +16,7 @@ public class Square extends Rectangle {
 	private Color theColor;
 
 	public enum TerrainType {
-		FARM, MINE, WATER, SWAMP, PLAIN, FOREST, CASTLE, BLANK;
+		FARM, MINE, WATER, SWAMP, PLAIN, FOREST, CASTLE, BLANK, OUTOFBOUNDS;
 	}
 
 	public Square(TerrainType terrainType) {
@@ -54,6 +54,9 @@ public class Square extends Rectangle {
 			this.theColor = Color.WHITE;
 			 this.name = "B";
 			 break;
+		case OUTOFBOUNDS:
+			this.name = "X";
+			break;
 
 		}
 	}

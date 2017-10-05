@@ -35,7 +35,9 @@ public class TextVersion {
 		boolean validXYChoice;
 		boolean validChoice;
 
-		for (int i = 0; i < 25;) {
+		for (int i = 0; i < 12;) {
+			thePlayer.setBoardBounds();
+			thePlayer.printBoard();
 			toBePlaced = giveRandomDomino();
 			validChoice = false;
 			while (!validChoice) {
@@ -105,6 +107,8 @@ public class TextVersion {
 		}
 
 	}
+	
+	
 
 	// This method uses the hasMatchingTerrain method to check if the tile being
 	// placed has adjacent matching terrain, and if the tile isn't overlapping
