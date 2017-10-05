@@ -44,7 +44,7 @@ public class Square extends Rectangle {
 			break;
 		case FOREST:
 			this.theColor = new Color(0x004d00);
-			this.name = "F";
+			this.name = "T";
 			break;
 		case CASTLE:
 			this.theColor = Color.PINK;
@@ -77,5 +77,7 @@ public class Square extends Rectangle {
 	public String getCrownsString() {
 		return Integer.toString(this.crowns);
 	}
+	
+	
 
 }

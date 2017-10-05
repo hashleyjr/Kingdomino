@@ -22,90 +22,140 @@ public class TextVersion {
 		return theTurn;
 	}
 
-	//This method gives the player a random domino, lets them specify an XY coordination and a heading, and checks if its a legal placement using the isn'tOccupied
-	//and hasMatchingTerrain methods.
+	// This method gives the player a random domino, lets them specify an XY
+	// coordination and a heading, and checks if its a legal placement using the
+	// isntOccupied and hasMatchingTerrain methods.
 	public void placeTheDomino() {
-		Domino toBePlaced = giveRandomDomino();
 		
-		int x;
-		int y;
+		Domino toBePlaced;
+
+		int x = 0;
+		int y = 0;
 		String heading;
-		
-		toBePlaced.printADomino();
-		while (true) {
-			System.out.println("Please place this domino, specify x coord");
-			x = reader.nextInt();
-			System.out.println("Specify y coord");
-			y = reader.nextInt();
-			if (isntOccupied(x, y)) {
-				System.out.println("You picked a valid XY location");
-				break;
-			} else {
-				System.out.println("This spot is already occupied, try again");
-			}
+		boolean validXYChoice;
+		boolean validChoice;
 
+		for (int i = 0; i < 25;) {
+			toBePlaced = giveRandomDomino();
+			validChoice = false;
+			while (!validChoice) {
+				validXYChoice = false;
+				while (!validXYChoice) {
+					toBePlaced.printADomino();
+					System.out.println("Please place this domino, specify x coord");
+					x = reader.nextInt();
+					System.out.println("Specify y coord");
+					y = reader.nextInt();
+					if (isntOccupied(x, y)) {
+						System.out.println("You picked a valid XY location");
+						validXYChoice = true;
+					} else {
+						System.out.println("This spot is already occupied, try again");
+					}
+				}
+				System.out.println("Specify the heading");
+				heading = reader.next();
+				switch (heading) {
+				case ("S"):
+
+					if (isLegalPlacement(x, y, toBePlaced, heading)) {
+
+						thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+						thePlayer.getPlayerBoard()[x][y - 1] = toBePlaced.getLeft();
+						validChoice = true;
+						i++;
+					} else {
+						System.out.println("This is not a legal placement.");
+
+					}
+					break;
+				case ("N"):
+					if (isLegalPlacement(x, y, toBePlaced, heading)) {
+						thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+						thePlayer.getPlayerBoard()[x][y + 1] = toBePlaced.getLeft();
+						validChoice = true;
+						i++;
+					} else {
+						System.out.println("This is not a legal placement.");
+					}
+					break;
+				case ("E"):
+					if (isLegalPlacement(x, y, toBePlaced, heading)) {
+						thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+						thePlayer.getPlayerBoard()[x - 1][y] = toBePlaced.getLeft();
+						validChoice = true;
+						i++;
+					} else {
+						System.out.println("This is not a legal placement.");
+					}
+					break;
+				case ("W"):
+					if (isLegalPlacement(x, y, toBePlaced, heading)) {
+						thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+						thePlayer.getPlayerBoard()[x + 1][y] = toBePlaced.getLeft();
+						validChoice = true;
+
+					} else {
+						System.out.println("This is not a legal placement.");
+					}
+					break;
+				}
+				thePlayer.printBoard();
+			}
 		}
-		while (true) {
-			System.out.println("Specify the heading");
-			heading = reader.next();
-
-			if (heading.equals("S") && hasMatchingTerrain(x, y, toBePlaced, heading)) {
-				if (isntOccupied(x, y - 1)) {
-					thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
-					thePlayer.getPlayerBoard()[x][y - 1] = toBePlaced.getLeft();
-					break;
-				} else {
-					System.out.println("You are overlapping with an already placed piece, try again");
-				}
-			}
-			if (heading.equals("N") && hasMatchingTerrain(x, y, toBePlaced, heading)) {
-				if (isntOccupied(x, y + 1)) {
-
-					thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
-					thePlayer.getPlayerBoard()[x][y + 1] = toBePlaced.getLeft();
-					break;
-				} else {
-					System.out.println("You are overlapping with an already placed piece, try again");
-				}
-			}
-			if (heading.equals("E") && hasMatchingTerrain(x, y, toBePlaced, heading)) {
-				if (isntOccupied(x - 1, y)) {
-					thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
-					thePlayer.getPlayerBoard()[x - 1][y] = toBePlaced.getLeft();
-					break;
-				} else {
-					System.out.println("You are overlapping with an already placed piece, try again");
-				}
-			}
-			if (heading.equals("W") && hasMatchingTerrain(x, y, toBePlaced, heading)) {
-				if (isntOccupied(x + 1, y)) {
-					thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
-					thePlayer.getPlayerBoard()[x + 1][y] = toBePlaced.getLeft();
-					break;
-				} else {
-					System.out.println("You are overlapping with an already placed piece, try again");
-				}
-			}
-		}
-
-		thePlayer.printBoard();
-
-		// thePlayer.printBoard();
-		System.out.println(heading);
 
 	}
-	
-	//This method checks if a certain location on in the player's area is already occupied by a tile. Used when the player is placing a tile, to make
-	//sure that the one they are placing doesn't overlap with an already laid tile.
+
+	// This method uses the hasMatchingTerrain method to check if the tile being
+	// placed has adjacent matching terrain, and if the tile isn't overlapping
+	// with an already placed tile
+	public boolean isLegalPlacement(int x, int y, Domino toBePlaced, String heading) {
+		switch (heading) {
+		case "S":
+			if (hasMatchingTerrain(x, y, toBePlaced, heading) && isntOccupied(x, y - 1))
+				return true;
+			else {
+
+				return false;
+			}
+		case "N":
+			if (hasMatchingTerrain(x, y, toBePlaced, heading) && isntOccupied(x, y + 1))
+				return true;
+			else
+				return false;
+		case "E":
+			if (hasMatchingTerrain(x, y, toBePlaced, heading) && isntOccupied(x - 1, y))
+				return true;
+			else
+				return false;
+		case "W":
+			if (hasMatchingTerrain(x, y, toBePlaced, heading) && isntOccupied(x + 1, y))
+				return true;
+			else
+				return false;
+
+		}
+		return false;
+
+	}
+
+	// This method checks if a certain location on in the player's area is
+	// already occupied by a tile. Used when the player is placing a tile, to
+	// make sure that the one they are placing doesn't overlap with an already
+	// laid tile.
 	public boolean isntOccupied(int x, int y) {
 		if (thePlayer.getPlayerBoard()[x][y].getName() != "B") {
+
 			return false;
-		} else
+		} else {
+
 			return true;
+		}
 	}
-	
-   //In a game of KingDomino, a tile being laid has to have have at least one of its terrain types matching the terrain type of a tile
-	//adjacent to where it's being laid. This method checks for that.
+
+	// In a game of KingDomino, a tile being laid has to have have at least one
+	// of its terrain types matching the terrain type of a tile
+	// adjacent to where it's being laid. This method checks for that.
 	public boolean hasMatchingTerrain(int x, int y, Domino d, String heading) {
 
 		switch (heading) {

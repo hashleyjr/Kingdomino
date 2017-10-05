@@ -31,7 +31,7 @@ public class Domino extends JPanel {
 	}
 
 	public void printADomino() {
-		System.out.print(this.leftSquare.getName() + "" + this.leftSquare.getCrowns() + "  "
+		System.out.println(this.leftSquare.getName() + "" + this.leftSquare.getCrowns() + "  "
 				+ this.pivotSquare.getName() + "" + this.pivotSquare.getCrowns() + " " + this.number);
 	}
 
