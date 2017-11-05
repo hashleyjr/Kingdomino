@@ -14,7 +14,7 @@ public class Square extends Rectangle {
 
 	private String name;
 	private Color theColor;
-
+	private boolean scoredYet = false;
 	public enum TerrainType {
 		FARM, MINE, WATER, SWAMP, PLAIN, FOREST, CASTLE, BLANK, OUTOFBOUNDS;
 	}
@@ -43,16 +43,17 @@ public class Square extends Rectangle {
 			this.theColor = Color.GREEN;
 			break;
 		case FOREST:
-			this.theColor = new Color(0x004d00);
 			this.name = "T";
+			this.theColor = new Color(0x004d00);
+			
 			break;
 		case CASTLE:
-			this.theColor = Color.PINK;
 			this.name = "C";
+			this.theColor = Color.PINK;
 			break;
 		case BLANK:
-			this.theColor = Color.WHITE;
 			 this.name = "B";
+			this.theColor = Color.WHITE;
 			 break;
 		case OUTOFBOUNDS:
 			this.name = "X";
@@ -60,7 +61,7 @@ public class Square extends Rectangle {
 
 		}
 	}
-
+	
 	public Color getColor() {
 		return this.theColor;
 	}
@@ -79,6 +80,12 @@ public class Square extends Rectangle {
 
 	public String getCrownsString() {
 		return Integer.toString(this.crowns);
+	}
+	public boolean isScoredYet() {
+		return scoredYet;
+	}
+	public void setScoredYet(boolean scoredYet) {
+		this.scoredYet = scoredYet;
 	}
 	
 	

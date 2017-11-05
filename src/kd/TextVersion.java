@@ -3,30 +3,40 @@ package kd;
 import java.util.Random;
 import java.util.Scanner;
 
+import kd.Square.TerrainType;
+
 public class TextVersion {
 
 	Player thePlayer = new Player();
 	DominoSupply theSupply = new DominoSupply();
 	Scanner reader = new Scanner(System.in);
+	boolean isGameOver = false;
 
 	public Domino giveRandomDomino() {
 		Domino theTurn = new Domino();
-
-		int rnd = new Random().nextInt(theSupply.length());
-		if (theSupply.getUnplayed()[rnd].getPlayed() == false) {
-			theTurn = theSupply.getUnplayed()[rnd];
-			theSupply.getUnplayed()[rnd].setPlayed();
-
+		boolean foundflag = true;
+		while (foundflag) {
+			int rnd = new Random().nextInt(theSupply.length() - 1);
+			if (theSupply.getUnplayed()[rnd].getPlayed() == false) {
+				theTurn = theSupply.getUnplayed()[rnd];
+				theSupply.getUnplayed()[rnd].setPlayed();
+				foundflag = false;
+			}
 		}
-
 		return theTurn;
 	}
 
 	// This method gives the player a random domino, lets them specify an XY
 	// coordination and a heading, and checks if its a legal placement using the
 	// isntOccupied and hasMatchingTerrain methods.
+	public void printAllDominos() {
+		for (int i = 0; i <= theSupply.getUnplayed().length; i++) {
+			theSupply.getUnplayed()[48].printADomino();
+		}
+	}
+
 	public void placeTheDomino() {
-		
+
 		Domino toBePlaced;
 
 		int x = 0;
@@ -58,6 +68,7 @@ public class TextVersion {
 				System.out.println("Specify the heading");
 				heading = reader.next();
 				switch (heading) {
+
 				case ("S"):
 
 					if (isLegalPlacement(x, y, toBePlaced, heading)) {
@@ -96,19 +107,23 @@ public class TextVersion {
 						thePlayer.getPlayerBoard()[x][y] = toBePlaced.getPivot();
 						thePlayer.getPlayerBoard()[x + 1][y] = toBePlaced.getLeft();
 						validChoice = true;
-
+						i++;
 					} else {
 						System.out.println("This is not a legal placement.");
 					}
+					break;
+				case ("U"):
+					System.out.print("Too bad");
+					validChoice = true;
+					i++;
 					break;
 				}
 				thePlayer.printBoard();
 			}
 		}
+		thePlayer.scoreTheBoard();
 
 	}
-	
-	
 
 	// This method uses the hasMatchingTerrain method to check if the tile being
 	// placed has adjacent matching terrain, and if the tile isn't overlapping
@@ -255,6 +270,8 @@ public class TextVersion {
 		TextVersion x = new TextVersion();
 		x.thePlayer.printBoard();
 		x.placeTheDomino();
+		// x.thePlayer.printBoard();
+		x.thePlayer.scoreTheBoard();
 
 		// TODO Auto-generated method stub
 
