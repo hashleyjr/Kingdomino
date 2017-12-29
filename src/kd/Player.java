@@ -1,213 +1,239 @@
 package kd;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import kd.Square.TerrainType;
+import java.util.Scanner;
 
 public class Player {
-	private List<Domino> dominos;
-	private Domino chosenDomino;
-	private Domino toBePlaced;
-	private Square[][] playerBoard = new Square[10][10];
-	private int totalBoardScore = 0;
-	private Square[][] testBoard = new Square[10][10];
+	private PlayArea playArea = new PlayArea();
+	Scanner reader = new Scanner(System.in);
 
-	public Player() {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if ((i == 4) && (j == 4)) {
-					this.playerBoard[j][i] = new Square(TerrainType.CASTLE);
-				} else {
-					this.playerBoard[j][i] = new Square(TerrainType.BLANK);
-				}
-			}
-		}
+	public PlayArea getPlayArea() {
+		return playArea;
 	}
 
-	public void populateTestBoard() {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if ((j == 3 && i == 3) || j == 4 && i == 3) {
-					playerBoard[j][i] = new Square(TerrainType.WATER);
-					playerBoard[j][i].setCrowns(1);
-				} else if (j == 4 && i == 4) {
-					playerBoard[j][i] = new Square(TerrainType.CASTLE);
-				} else if (i <= 1 || j <= 1 || i >= 7 || j >= 7) {
+	// This methos lets the current player specify at which XY coordinate they
+	// want their domino
+	// that they have just chosen to be placed. It returns a DominoPlacement
+	// object.
+	public DominoPlacement specifyPlacement(Domino toBePlaced) {
+		int x = 0, y = 0;
+		String heading;
+		boolean validXYChoice = false;
+		DominoPlacement thePlacement;
 
-				} else if (j <= 6) {
-					playerBoard[j][i] = new Square(TerrainType.FOREST);
-					playerBoard[j][i].setCrowns(1);
-				}
-
+		// Keep asking for a coordinate until a valid one is chosen.
+		while (!validXYChoice) {
+			System.out.println("Specify an X coord");
+			x = reader.nextInt();
+			System.out.println("Specify a Y coord");
+			y = reader.nextInt();
+			if (isntOccupied(x, y)) {
+				System.out.println("You picked a valid XY location");
+				validXYChoice = true;
+			} else {
+				System.out.println("This spot is already occupied, try again");
 			}
 		}
+		System.out.println("Specify the heading");
+		heading = reader.next();
+		thePlacement = new DominoPlacement(x, y, toBePlaced, heading);
+		return thePlacement;
 
 	}
 
-	public void setBoardBounds() {
-		int minX = 9;
-		int maxX = 0;
-		int minY = 9;
-		int maxY = 0;
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (this.playerBoard[j][i].getName() != "B" && this.playerBoard[j][i].getName() != "X") {
-					if (j < minX) {
-						minX = j;
-					}
-					if (j > maxX) {
-						maxX = j;
-					}
-					if (i < minY) {
-						minY = i;
-					}
-					if (i > maxY) {
-						maxY = i;
-					}
-				}
+	// Do one turn, i.e. have players specify where they want the Domino to be
+	// placed, check if it is a legal placement,
+	// and modify the Players PlayArea to reflect that choice. These are all
+	// done using seperate methods.
+	public void doTurn(Domino chosenDomino) {
+		boolean validChoice;
+		DominoPlacement currentPlacement;
+		playArea.setBoardBounds();
+		playArea.printBoard();
+		validChoice = false;
+		while (!validChoice) {
 
-			}
-		}
+			currentPlacement = specifyPlacement(chosenDomino);
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (j > minX + 4) {
-					this.playerBoard[j][i] = new Square(TerrainType.OUTOFBOUNDS);
-				}
-				if (j < maxX - 4) {
-					this.playerBoard[j][i] = new Square(TerrainType.OUTOFBOUNDS);
-				}
-				if (i > minY + 4) {
-					this.playerBoard[j][i] = new Square(TerrainType.OUTOFBOUNDS);
-				}
-				if (i < maxY - 4) {
-					this.playerBoard[j][i] = new Square(TerrainType.OUTOFBOUNDS);
-				}
-			}
-		}
-	}
-
-	List<Square> theZone = new ArrayList<Square>();
-
-	public void findAZone(int x, int y) {
-
-		System.out.println(x + " " + y);
-		if (!(this.playerBoard[x][y].isScoredYet())) {
-			if (this.playerBoard[x][y].getName() == "X" || this.playerBoard[x][y].getName() == "B") {
+			if (currentPlacement.heading.equals("U")) {
+				System.out.print("Too bad");
+				validChoice = true;
 
 			} else {
-				theZone.add(this.playerBoard[x][y]);
-				this.playerBoard[x][y].setScoredYet(true);
-				if (this.playerBoard[x + 1][y].getName() == this.playerBoard[x][y].getName() && (x + 1 != 10)
-						&& !this.playerBoard[x + 1][y].isScoredYet()) {
+				if (isLegalPlacement(currentPlacement)) {
 
-					findAZone(x + 1, y);
-					System.out.println("R");
+					makePlacement(currentPlacement);
+					validChoice = true;
 
-				}
-
-				if ((this.playerBoard[x - 1][y].getName() == this.playerBoard[x][y].getName()) && (x - 1 != -1)
-						&& !this.playerBoard[x - 1][y].isScoredYet()) {
-					findAZone(x - 1, y);
-					System.out.println("L");
+				} else {
+					System.out.println("This is not a legal placement.");
 
 				}
-
-				if (this.playerBoard[x][y + 1].getName() == this.playerBoard[x][y].getName() && (y + 1 != 10)
-						&& !this.playerBoard[x][y + 1].isScoredYet()) {
-					findAZone(x, y + 1);
-					System.out.println("D");
-
-				}
-
-				if (this.playerBoard[x][y - 1].getName() == this.playerBoard[x][y].getName() && (y - 1 != -1)
-						&& !this.playerBoard[x][y - 1].isScoredYet()) {
-					findAZone(x, y - 1);
-					System.out.println("U");
-
-				}
-
 			}
 
 		}
-
 	}
 
+	// this method places the chosen Domino "toBePlaced" at the specified XY
+	// location, facing the direction of the heading. It does not
+	// check if it is a legal placement.
+	public void makePlacement(DominoPlacement thePlacement) {
+		int x = thePlacement.x;
+		int y = thePlacement.y;
+		Domino toBePlaced = thePlacement.toBePlaced;
+		String heading = thePlacement.heading;
+		switch (heading) {
 
+		case ("S"):
 
-	public void scoreAZone(int x, int y) {
+			playArea.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+			playArea.getPlayerBoard()[x][y - 1] = toBePlaced.getLeft();
 
-		findAZone(x, y);
-		int numCrowns = 0;
-		for (int i = 0; i < theZone.size(); i++) {
-			numCrowns += theZone.get(i).getCrowns();
+			break;
+		case ("N"):
+			playArea.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+			playArea.getPlayerBoard()[x][y + 1] = toBePlaced.getLeft();
+
+			break;
+		case ("E"):
+
+			playArea.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+			playArea.getPlayerBoard()[x - 1][y] = toBePlaced.getLeft();
+
+			break;
+		case ("W"):
+
+			playArea.getPlayerBoard()[x][y] = toBePlaced.getPivot();
+			playArea.getPlayerBoard()[x + 1][y] = toBePlaced.getLeft();
+
+			break;
 		}
-		this.totalBoardScore += (theZone.size() * numCrowns);
-		theZone = new ArrayList<Square>();
-		// System.out.print(" " + numCrowns + " ");
-		// System.out.print(theZone.size());
-
-		// System.out.print("Scored");
-
 	}
 
-	public void scoreTheBoard() {
+	// This method checks if a certain location on in the player's area is
+	// already occupied by a Domino. Used when the player is placing a Domino,
+	// to
+	// make sure that the one they are placing doesn't overlap with an already
+	// laid Domino.
+	public boolean isntOccupied(int x, int y) {
+		if (playArea.getPlayerBoard()[x][y].getName() != "B") {
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				scoreAZone(j, i);
+			return false;
+		} else {
+
+			return true;
+		}
+	}
+	
+	
+	// In a game of KingDomino, a Domino being laid has to have have at least one
+	// of its terrain types matching the terrain type of a Domino
+	// adjacent to where it's being laid, unless is being laid next to the Castle terrain type, denoted by
+	// "C", which is a wild card terrain type. This method checks for adjacent matching terrain.
+	public boolean hasMatchingAdjacentTerrain(DominoPlacement thePlacement) {
+		int x = thePlacement.x;
+		int y = thePlacement.y;
+		Domino toBePlaced = thePlacement.toBePlaced;
+		String heading = thePlacement.heading;
+		// for the specified heading, check for matching terrain all squares
+		// adjacent to the pivot square not including the non pivot, and all
+		// squares adjacent to the non
+		// pivot, not including the pivot.
+		switch (heading) {
+		case "S":
+			for (int i = -1; i <= 1; i += 2) {
+				if (checkAdjascentTerrain(x + i, y, toBePlaced) || checkAdjascentTerrain(x, y + 1, toBePlaced)) {
+					return true;
+				} else if (checkAdjascentTerrain(x + i, y - 1, toBePlaced)
+						|| checkAdjascentTerrain(x, y - 2, toBePlaced)) {
+					return true;
+				}
 			}
-		}
-
-		System.out.print(this.totalBoardScore);
-	}
-
-	public void printBoard() {
-		System.out.println("");
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (playerBoard[j][i].getName() == "B")
-					System.out.print(playerBoard[j][i].getName() + "" + j + "" + i + " ");
-				else if (playerBoard[j][i].getName() == "X")
-					System.out.print(playerBoard[j][i].getName() + "   ");
-				else
-					System.out.print(playerBoard[j][i].getName() + "" + playerBoard[j][i].getCrowns() + "  ");
-
+			System.out.println("The terrain types don't match, try again.");
+			break;
+		case "N":
+			for (int i = -1; i <= 1; i += 2) {
+				if (checkAdjascentTerrain(x + i, y, toBePlaced) || checkAdjascentTerrain(x, y - 1, toBePlaced)) {
+					return true;
+				} else if (checkAdjascentTerrain(x + i, y + 1, toBePlaced)
+						|| checkAdjascentTerrain(x, y + 2, toBePlaced)) {
+					return true;
+				}
 			}
-			System.out.println("");
-
-		}
-		System.out.println("");
-	}
-
-	public void printTestBoard() {
-		System.out.println("");
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (testBoard[j][i].getName() == "B")
-					System.out.print(testBoard[j][i].getName() + "" + j + "" + i + " ");
-				else if (testBoard[j][i].getName() == "X")
-					System.out.print(testBoard[j][i].getName() + "   ");
-				else
-					System.out.print(testBoard[j][i].getName() + "" + testBoard[j][i].getCrowns() + "  ");
-
+			System.out.println("The terrain types don't match, try again.");
+			break;
+		case "E":
+			for (int i = -1; i <= 1; i += 2) {
+				if (checkAdjascentTerrain(x, y + i, toBePlaced) || checkAdjascentTerrain(x + 1, y, toBePlaced)) {
+					return true;
+				} else if (checkAdjascentTerrain(x - 1, y + i, toBePlaced)
+						|| checkAdjascentTerrain(x - 2, y, toBePlaced)) {
+					return true;
+				}
 			}
-			System.out.println("");
+			System.out.println("The terrain types don't match, try again.");
+			break;
+		case "W":
+			for (int i = -1; i <= 1; i += 2) {
+				if (checkAdjascentTerrain(x, y + i, toBePlaced) || checkAdjascentTerrain(x - 1, y, toBePlaced)) {
+					return true;
+				} else if (checkAdjascentTerrain(x + 1, y + i, toBePlaced)
+						|| checkAdjascentTerrain(x + 2, y, toBePlaced)) {
+					return true;
+				}
+			}
+			System.out.println("The terrain types don't match, try again.");
+			break;
+		}
+		return false;
+	}
+
+	// This method uses the hasMatchingAdjacentTerrain method to check if the
+	// tile being placed has adjacent matching terrain, and if the tile isn't
+	// overlapping with an already placed tile
+	public boolean isLegalPlacement(DominoPlacement thePlacement) {
+		int x = thePlacement.x;
+		int y = thePlacement.y;
+		String heading = thePlacement.heading;
+		switch (heading) {
+		case "S":
+			if (hasMatchingAdjacentTerrain(thePlacement) && isntOccupied(x, y - 1))
+				return true;
+			else {
+
+				return false;
+			}
+		case "N":
+			if (hasMatchingAdjacentTerrain(thePlacement) && isntOccupied(x, y + 1))
+				return true;
+			else
+				return false;
+		case "E":
+			if (hasMatchingAdjacentTerrain(thePlacement) && isntOccupied(x - 1, y))
+				return true;
+			else
+				return false;
+		case "W":
+			if (hasMatchingAdjacentTerrain(thePlacement) && isntOccupied(x + 1, y))
+				return true;
+			else
+				return false;
 
 		}
-		System.out.println("");
+		return false;
+
+	}
+ 
+	//This method is used by hasAdjacentMatching terrain. It checks a specific Square on a Player's board,
+	//and compares it to a Domino toBePlaced, checking if that Domino shares any terrain types with that Square.
+	public boolean checkAdjascentTerrain(int x, int y, Domino toBePlaced) {
+		if (playArea.getPlayerBoard()[x][y].getName() == toBePlaced.getPivot().getName()
+				|| playArea.getPlayerBoard()[x][y].getName() == toBePlaced.getLeft().getName()
+				|| playArea.getPlayerBoard()[x][y].getName() == "C") {
+			return true;
+		} else
+			return false;
 	}
 
-	public Square[][] getPlayerBoard() {
-		return this.playerBoard;
-	}
+	
 
-	public void addDomino(Domino domino) {
-		this.dominos.add(domino);
-	}
-
-	public void setChosenDomino(Domino chosenDomino) {
-		this.chosenDomino = chosenDomino;
-	}
 }

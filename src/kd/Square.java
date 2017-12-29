@@ -23,51 +23,51 @@ public class Square extends Rectangle {
 
 		switch (terrainType) {
 		case FARM:
-			this.name = "F";
-			this.theColor = Color.YELLOW;
+			name = "F";
+			theColor = Color.YELLOW;
 			break;
 		case MINE:
-			this.name = "M";
-			this.theColor = Color.BLACK;
+			name = "M";
+			theColor = Color.BLACK;
 			break;
 		case WATER:
-			this.name = "W";
-			this.theColor = Color.BLUE;
+			name = "W";
+			theColor = Color.BLUE;
 			break;
 		case SWAMP:
-			this.name = "S";
-			this.theColor = Color.GRAY;
+			name = "S";
+			theColor = Color.GRAY;
 			break;
 		case PLAIN:
-			this.name = "P";
-			this.theColor = Color.GREEN;
+			name = "P";
+			theColor = Color.GREEN;
 			break;
 		case FOREST:
-			this.name = "T";
-			this.theColor = new Color(0x004d00);
+			name = "T";
+			theColor = new Color(0x004d00);
 			
 			break;
 		case CASTLE:
-			this.name = "C";
-			this.theColor = Color.PINK;
+			name = "C";
+			theColor = Color.PINK;
 			break;
 		case BLANK:
-			 this.name = "B";
-			this.theColor = Color.WHITE;
+			 name = "B";
+			theColor = Color.WHITE;
 			 break;
 		case OUTOFBOUNDS:
-			this.name = "X";
+			name = "X";
 			break;
 
 		}
 	}
 	
 	public Color getColor() {
-		return this.theColor;
+		return theColor;
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setCrowns(int crowns) {
@@ -75,11 +75,11 @@ public class Square extends Rectangle {
 	}
 
 	public int getCrowns() {
-		return this.crowns;
+		return crowns;
 	}
 
 	public String getCrownsString() {
-		return Integer.toString(this.crowns);
+		return Integer.toString(crowns);
 	}
 	public boolean isScoredYet() {
 		return scoredYet;

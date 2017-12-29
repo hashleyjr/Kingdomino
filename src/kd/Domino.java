@@ -17,22 +17,32 @@ public class Domino extends JPanel {
 	private Square pivotSquare;
 	private int number;
 	private boolean played;
+	private boolean chosen;
 
 	public Domino() {
-		this.played = false;
+		played = false;
+		chosen = false;
 	}
+	
 
 	public void setPlayed() {
-		this.played = true;
+		played = true;
 	}
 
 	public boolean getPlayed() {
-		return this.played;
+		return played;
 	}
 
+	public void setChosen() {
+		chosen = true;
+	}
+
+	public boolean isChosen() {
+		return chosen;
+	}
 	public void printADomino() {
-		System.out.println(this.leftSquare.getName() + "" + this.leftSquare.getCrowns() + " "
-				+ this.pivotSquare.getName() + "" + this.pivotSquare.getCrowns() + " " + this.number);
+		System.out.println(leftSquare.getName() + "" + leftSquare.getCrowns() + " "
+				+ pivotSquare.getName() + "" + pivotSquare.getCrowns() + " " + number);
 	}
 
 	public void setLeft(Square leftSquare) {
@@ -48,30 +58,30 @@ public class Domino extends JPanel {
 	}
 
 	public Square getPivot() {
-		return this.pivotSquare;
+		return pivotSquare;
 	}
 	public Square getLeft(){
-		return this.leftSquare;
+		return leftSquare;
 	}
 
 	public void setLeftCrowns(int num) {
-		this.leftSquare.setCrowns(num);
+		leftSquare.setCrowns(num);
 	}
 
 	public void setRightCrowns(int num) {
-		this.pivotSquare.setCrowns(num);
+		pivotSquare.setCrowns(num);
 	}
 
 	public int getLeftCrowns() {
-		return this.leftSquare.getCrowns();
+		return leftSquare.getCrowns();
 	}
 
 	public int getRightCrowns() {
-		return this.pivotSquare.getCrowns();
+		return pivotSquare.getCrowns();
 	}
 
 	public int getNumber() {
-		return this.number;
+		return number;
 	}
 
 	public void paintComponent(Graphics g) {
