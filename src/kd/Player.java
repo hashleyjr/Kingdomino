@@ -10,7 +10,7 @@ public class Player {
 		return playArea;
 	}
 
-	// This methos lets the current player specify at which XY coordinate they
+	// This method lets the current player specify at which XY coordinate they
 	// want their domino
 	// that they have just chosen to be placed. It returns a DominoPlacement
 	// object.
@@ -22,10 +22,8 @@ public class Player {
 
 		// Keep asking for a coordinate until a valid one is chosen.
 		while (!validXYChoice) {
-			System.out.println("Specify an X coord");
-			x = reader.nextInt();
-			System.out.println("Specify a Y coord");
-			y = reader.nextInt();
+			x = InputGatherer.gatherInt("Specify an X coord");
+			y = InputGatherer.gatherInt("Specify a Y coord");
 			if (isntOccupied(x, y)) {
 				System.out.println("You picked a valid XY location");
 				validXYChoice = true;
@@ -33,8 +31,11 @@ public class Player {
 				System.out.println("This spot is already occupied, try again");
 			}
 		}
-		System.out.println("Specify the heading");
-		heading = reader.next();
+		System.out.print("Specify the heading");
+	
+			heading = InputGatherer.gatherString("Enter N, S, E, or W. Enter U if the domino is unplaceable.");
+			
+		
 		thePlacement = new DominoPlacement(x, y, toBePlaced, heading);
 		return thePlacement;
 
@@ -49,6 +50,8 @@ public class Player {
 		DominoPlacement currentPlacement;
 		playArea.setBoardBounds();
 		playArea.printBoard();
+
+		chosenDomino.printADomino();
 		validChoice = false;
 		while (!validChoice) {
 
@@ -123,12 +126,14 @@ public class Player {
 			return true;
 		}
 	}
-	
-	
-	// In a game of KingDomino, a Domino being laid has to have have at least one
+
+	// In a game of KingDomino, a Domino being laid has to have have at least
+	// one
 	// of its terrain types matching the terrain type of a Domino
-	// adjacent to where it's being laid, unless is being laid next to the Castle terrain type, denoted by
-	// "C", which is a wild card terrain type. This method checks for adjacent matching terrain.
+	// adjacent to where it's being laid, unless is being laid next to the
+	// Castle terrain type, denoted by
+	// "C", which is a wild card terrain type. This method checks for adjacent
+	// matching terrain.
 	public boolean hasMatchingAdjacentTerrain(DominoPlacement thePlacement) {
 		int x = thePlacement.x;
 		int y = thePlacement.y;
@@ -222,9 +227,11 @@ public class Player {
 		return false;
 
 	}
- 
-	//This method is used by hasAdjacentMatching terrain. It checks a specific Square on a Player's board,
-	//and compares it to a Domino toBePlaced, checking if that Domino shares any terrain types with that Square.
+
+	// This method is used by hasAdjacentMatching terrain. It checks a specific
+	// Square on a Player's board,
+	// and compares it to a Domino toBePlaced, checking if that Domino shares
+	// any terrain types with that Square.
 	public boolean checkAdjascentTerrain(int x, int y, Domino toBePlaced) {
 		if (playArea.getPlayerBoard()[x][y].getName() == toBePlaced.getPivot().getName()
 				|| playArea.getPlayerBoard()[x][y].getName() == toBePlaced.getLeft().getName()
@@ -233,7 +240,5 @@ public class Player {
 		} else
 			return false;
 	}
-
-	
 
 }
